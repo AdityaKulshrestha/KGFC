@@ -3,7 +3,7 @@ import glob
 from typing import List
 import os
 import tree_sitter_python as tspython
-from src.kgfc.tree_sitter import Language, Parser, Treesitter
+from kgfc.tree_sitter import Language, Parser, Treesitter
 
 
 
