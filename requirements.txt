@@ -1,0 +1,6 @@
+pylint
+GitPython
+flake8
+mypy
+tree-sitter
+tree-sitter-python
