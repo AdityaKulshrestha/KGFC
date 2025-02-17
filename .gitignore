@@ -2,3 +2,5 @@
 kgfc.egg-info/
 __pycache__
 tests/
+.python-version
+.env

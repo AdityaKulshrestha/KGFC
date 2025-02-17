@@ -1,0 +1,12 @@
+[project]
+name = "kgfc"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "neo4j>=5.28.1",
+    "tree-sitter>=0.24.0",
+    "tree-sitter-languages>=1.10.2",
+    "tree-sitter-python>=0.23.6",
+]
