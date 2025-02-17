@@ -4,3 +4,5 @@ flake8
 mypy
 tree-sitter
 tree-sitter-python
+tree_sitter_languages 
+neo4j

@@ -2,16 +2,19 @@ from collections import defaultdict
 import glob
 from typing import List
 import os
+from ..treesitter import Treesitter, LanguageEnum
 import tree_sitter_python as tspython
-from kgfc.tree_sitter import Language, Parser, Treesitter
+from tree_sitter import Language
 
+
+LANGUAGE = {
+    'python': LanguageEnum.PYTHON
+}
 
 
 class CodeTree():
     def __init__(self):
-        PY_LANGUAGE = Language(tspython.language())
-        # self.parser = Parser(PY_LANGUAGE)
-        treesitter_parser = Treesitter.create_treesitter(PY_LANGUAGE)
+        self.treesitter_parser = Treesitter.create_treesitter()
 
 
     def parse_code_files(self, codebase_path: str):
@@ -30,7 +33,7 @@ class CodeTree():
             with open(file_path, "r", encoding="utf-8") as file:
                 code = file.read()
                 file_bytes = code.encode()
-                class_nodes, method_nodes = self.parser.parse(file_bytes)
+                class_nodes, method_nodes = self.treesitter_parser.parse(file_bytes)
 
                 for class_node in class_nodes:
                     class_name = class_node.name
@@ -68,8 +71,3 @@ class CodeTree():
         return codebase_files
     
 
-# Testing
-if __name__ == "__main__":
-    codetree = CodeTree()
-    classes_data, method_data, all_classes, all_methods = codetree.parse_code_files('/root/kubernetes_files/Mooshak')
-    print(classes_data)

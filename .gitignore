@@ -1,3 +1,4 @@
 
 kgfc.egg-info/
-src/kgfc/__pycache__
+__pycache__
+tests/

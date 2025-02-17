@@ -3,6 +3,9 @@ from abc import ABC
 from tree_sitter import Language, Parser
 from enum import Enum
 from tree_sitter_languages import get_language, get_parser
+from tree_sitter import Language, Parser
+import tree_sitter_python as tspython
+from typing import Optional
 import logging 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
@@ -30,6 +33,10 @@ LANGUAGE_QUERIES = {
                 (string) @comment)
         """
     }
+}
+
+LANGUAGEOBJ = {
+    'python': Language(tspython.language())
 }
 
 
@@ -61,17 +68,22 @@ class TreesitterClassNode:
         self.node = node
 
 class Treesitter(ABC):
-    def __init__(self, language: LanguageEnum):
-        self.language_enum = language
-        self.parser = get_parser(language.value)
-        self.language_obj = get_language(language.value)
-        self.query_config = LANGUAGE_QUERIES.get(language)
+    def __init__(self):
+        self.language_obj = Language(tspython.language())
+        self.parser = Parser(self.language_obj)
+        self.query_config = LANGUAGE_QUERIES[LanguageEnum.PYTHON]
         if not self.query_config:
-            raise ValueError(f"Unsupported languag: {language}")
+            raise ValueError(f"Unsupported languag")
+        
+        # Corrected query instantiation
+        self.class_query = self.language_obj.query(self.query_config['class_query'])
+        self.method_query = self.language_obj.query(self.query_config['method_query'])
+        self.doc_query = self.language_obj.query(self.query_config['doc_query'])
         
     @staticmethod
-    def create_treesitter(language: LanguageEnum):
-        return Treesitter(language)
+    def create_treesitter():
+        """Allows to initiate for different languages."""
+        return Treesitter()
     
     def parse(self, file_bytes: bytes) -> tuple[list[TreesitterClassNode], list[TreesitterMethodNode]]:
         tree = self.parser.parse(file_bytes)
@@ -82,6 +94,7 @@ class Treesitter(ABC):
 
         class_name_by_node = {}
         class_captures = self.class_query.captures(root_node)
+        breakpoint()
         class_nodes = []
         for node, capture_name in class_captures:
             if capture_name == node.text.decode():
