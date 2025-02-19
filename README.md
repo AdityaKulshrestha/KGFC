@@ -18,3 +18,7 @@ A simple toolkit to allow QA on your codebase
 
 ## How to run
 `python -m kgfc.cli --help`
+
+
+## Running a simple file
+python -m kgfc.cli --file sample_code/main.py
