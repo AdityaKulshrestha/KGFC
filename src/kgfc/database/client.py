@@ -1,8 +1,19 @@
-from neo4j import GraphDatabase 
+import os
+from neo4j import GraphDatabase
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
-URI = "neo4j://localhost"
-AUTH = ("Aditya": "Aditya02")
+class Neo4jClient:
+    def __init__(self):
+        self.driver = GraphDatabase.driver(
+            os.environ['NEO4J_URI'],
+            auth=(os.environ['NEO4J_USER'], os.environ['NEO4J_PASSWORD'])
+        )
 
-with GraphDatabase.drive(URI, auth=AUTH) as driver:
-    driver.verify_connectivity()
+    def close(self):
+        self.driver.close()
+
+    def get_session(self):
+        return self.driver.session()

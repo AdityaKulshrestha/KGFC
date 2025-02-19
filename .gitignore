@@ -4,3 +4,6 @@ __pycache__
 tests/
 .python-version
 .env
+.venv
+.mypy_cache
+sample_code

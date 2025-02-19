@@ -64,8 +64,7 @@ class CodeTree():
         return class_data, method_data, all_class_names, all_method_names
 
     
-    def _traverse_codebase(self, codebase_path: str) -> List[str]:
-        
+    def _traverse_codebase(self, codebase_path: str) -> List[str]:  
         codebase_root_name = codebase_path.split('/')[-1]
         codebase_files = glob.glob(os.path.join(codebase_path, '**', '*.py'), recursive=True)
         return codebase_files
