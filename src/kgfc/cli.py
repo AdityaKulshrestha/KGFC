@@ -16,6 +16,8 @@ def main():
     file_content = read_file_content(args.file)
     class_nodes, method_nodes = parse_code_content(file_content)
 
+    print(method_nodes)
+
 
 if __name__ == "__main__":
     main()
