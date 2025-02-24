@@ -30,3 +30,9 @@ A simple toolkit to allow QA on your codebase
 
 ## Running a simple file
 python -m kgfc.cli --file sample_code/main.py
+
+
+### References 
+1. https://applyingml.com/resources/search-query-matching/ 
+2. [CodeKGC: Code Language Model for Generative Knowledge Graph Construction](https://arxiv.org/abs/2304.09048)
+3. https://wala.github.io/graph4code/

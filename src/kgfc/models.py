@@ -25,3 +25,10 @@ class LanguageEnum(Enum):
     RUST = "rust"
     JAVASCRIPT = "javascript"
     UNKWOWN = "unknown"
+
+
+class FileClass(BaseModel):
+    name: str
+    path: str
+    classes: List[TreesitterClassNode]
+    methods: List[TreesitterMethodNode]

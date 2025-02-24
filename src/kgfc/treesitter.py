@@ -89,14 +89,14 @@ class Treesitter(ABC):
         for _, method_capture in method_captures:
             capture_name, node = list(method_capture.items())[0]
             node = node[0]
-            if capture_name in ['method.name', 'function.name']:
+            if capture_name in ['method.name', 'function.name']:               # method.name removed this. 
                 method_name = node.text.decode()
                 method_node = node.parent
                 method_source_code = method_node.text.decode()
                 doc_comment = self._extract_doc_comment(method_node)
                 parent_class_name = None
                 for class_node in class_nodes:
-                    if self._is_descendant_of(method_node, class_nodes):
+                    if self._is_descendant_of(method_node, class_node):
                         parent_class_name = class_name_by_node[class_node.id]
                         break
 
