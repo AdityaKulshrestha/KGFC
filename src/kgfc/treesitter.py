@@ -3,12 +3,7 @@ from abc import ABC
 from tree_sitter import Language, Parser
 from .models import LanguageEnum, TreesitterClassNode, TreesitterMethodNode
 import tree_sitter_python as tspython
-import logging
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s"
-)
+from loguru import logger
 
 
 LANGUAGE_QUERIES = {
@@ -72,7 +67,7 @@ class Treesitter(ABC):
             node = node[0]
             class_name = node.text.decode()
             class_node = node.parent
-            logging.info(f"Found class: {class_name}")
+            logger.info(f"Found class: {class_name}")
             class_name_by_node[class_node.id] = class_name
             method_declarations = self._extract_methods_in_class(class_node)
             class_results.append(

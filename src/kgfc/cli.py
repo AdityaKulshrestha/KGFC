@@ -1,5 +1,5 @@
 import argparse
-from .core import parse_code
+from .core import parse_code, insert_to_kg
 
 
 def main():
@@ -14,6 +14,7 @@ def main():
         parser.error("Only one of --file or --url must be provided.")
 
     nodes = parse_code(args)
+    insert_to_kg(args.repo_url, nodes)
     print([nodes[i].name for i in range(len(nodes))])
 
 

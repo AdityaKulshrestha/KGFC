@@ -2,9 +2,10 @@ import os
 from contextlib import contextmanager
 from typing import Any, Dict, Optional
 from neo4j import GraphDatabase, Session, Transaction
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
-load_dotenv()
+dotenv_path = find_dotenv()
+load_dotenv(dotenv_path, override=True)
 
 
 class Neo4jClient:
@@ -41,7 +42,7 @@ class Neo4jConnection:
     def close(self):
         if self.driver:
             self.driver.close()
-    
+ 
     @contextmanager
     def session(self, **kwargs) -> Session:
         """Provides a session using a context manager"""
@@ -51,8 +52,8 @@ class Neo4jConnection:
 
 class Neo4jManager:
     """Handles database operations using the connection"""
-    def __init__(self, connection: Neo4jConnection):
-        self.connection = connection
+    def __init__(self):
+        self.connection = Neo4jConnection()
 
     def execute_query(self, query: str, parameters: Optional[Dict] = None, **kwargs) -> Any:
         """Generic method to execute a Cypher query"""
@@ -67,11 +68,11 @@ class Neo4jManager:
             return result.data()
         except Exception as e:
             # Handle or log exception
-            raise
+            raise e
 
     def create_node(self, label: str, properties: Dict, **kwargs) -> Any:
         """Create a node with given label and properties"""
-        query f"CREATE (n: {label} $props) RETURN n"
+        query = f"CREATE (n: {label} $props) RETURN n"
         return self.execute_query(query, {"props": properties}, **kwargs)
 
     def create_relationship(self, from_id: Any, to_id: Any, rel_type: str, properties: Optional[Dict] = None, **kwargs) -> Any:

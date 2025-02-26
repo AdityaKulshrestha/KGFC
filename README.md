@@ -1,7 +1,7 @@
 # KGFC
 
 A simple toolkit to allow QA on your codebase
-
+![Convert any repository in a knowledge graph](assets/sample_visualization.png)
 ## Installation
 1. pip install uv
 2. uv venv
@@ -16,7 +16,7 @@ A simple toolkit to allow QA on your codebase
 4. uv pip install -r requirements.txt
 5. create a .env file
     ```
-    NEO4J_URI=Neo4j url
+    NEO4J_URI=Neo4j URL | neo4j://localhost
     NEO4J_USER=Your username
     NEO4J_PASSWORD=Your password
     ```
@@ -30,6 +30,11 @@ A simple toolkit to allow QA on your codebase
 
 ## Running a simple file
 python -m kgfc.cli --file sample_code/main.py
+
+
+## Connect to your neo4j 
+1. Go to `http://localhost:7474/browser/`
+2. Login with your neo4j credentials
 
 
 ### References 
