@@ -41,3 +41,9 @@ python -m kgfc.cli --file sample_code/main.py
 1. https://applyingml.com/resources/search-query-matching/ 
 2. [CodeKGC: Code Language Model for Generative Knowledge Graph Construction](https://arxiv.org/abs/2304.09048)
 3. https://wala.github.io/graph4code/
+
+### ToDos
+- [ ] Add method for quering the database
+- [ ] Add functionality for vector embedding for code
+- [ ] Add support for hybrid query search
+- [ ] Improvise on the query search
