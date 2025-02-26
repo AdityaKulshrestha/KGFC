@@ -1,4 +1,4 @@
-import os 
+import os
 import tempfile
 import glob
 from git import Repo
@@ -6,6 +6,7 @@ from .utils import get_repo_name
 from .models import FileClass
 from kgfc import Treesitter
 import argparse
+
 
 def generate_codebase_tree(repo_url: str):
     """Generates a directory tree for a Github Repository"""
@@ -23,14 +24,17 @@ def generate_codebase_tree(repo_url: str):
 
                 try:
                     file_content = read_file_content(file_path)  # Read file content
-                    
+
                     class_nodes, method_nodes = parse_code_content(file_content)  # Parse content
-                    
-                    file_class = FileClass(name=os.path.basename(file_path), path=file_path.replace(f'{repo_path}{os.sep}', ""), 
-                                        classes=class_nodes, methods=method_nodes)
-                                    
+                    subdirs_list = file_path.replace(f'{repo_path}{os.sep}', "").split(os.sep)
+                    file_class = FileClass(name=os.path.basename(file_path),
+                                           path=subdirs_list,
+                                           classes=class_nodes,
+                                           methods=method_nodes
+                                           )
+
                     python_files_nodes.append(file_class)
-                    
+
                 except Exception as e:
                     print(f"Error processing {file_path}: {e}")
 
@@ -44,12 +48,16 @@ def parse_code(args: argparse.Namespace):
     if args.file:
         file_content = read_file_content(args.file)
         class_nodes, method_nodes = parse_code_content(file_content)
-        file_nodes = FileClass(name=args.file.split(os.sep)[-1], path=args.file, classes=class_nodes , methods=method_nodes)
+        file_nodes = FileClass(
+            name=args.file.split(os.sep)[-1],
+            path=args.file,
+            classes=class_nodes,
+            methods=method_nodes
+            )
     else:
         file_nodes = generate_codebase_tree(args.repo_url)
 
     return file_nodes
-
 
 
 def read_file_content(file_path: str):

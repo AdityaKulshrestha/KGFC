@@ -19,16 +19,16 @@ class TreesitterClassNode(BaseModel):
     node: Any
 
 
+class FileClass(BaseModel):
+    name: str
+    path: List[str]
+    classes: List[TreesitterClassNode]
+    methods: List[TreesitterMethodNode]
+
+
 class LanguageEnum(Enum):
     JAVA = "java"
     PYTHON = "python"
     RUST = "rust"
     JAVASCRIPT = "javascript"
     UNKWOWN = "unknown"
-
-
-class FileClass(BaseModel):
-    name: str
-    path: str
-    classes: List[TreesitterClassNode]
-    methods: List[TreesitterMethodNode]
