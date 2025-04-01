@@ -29,7 +29,7 @@ A simple toolkit to allow QA on your codebase
 
 
 ## Running a simple file
-python -m kgfc.cli --file sample_code/main.py
+python3 -m kgfc.cli --file sample_code/main.py
 
 
 ## Connect to your neo4j 
@@ -41,9 +41,11 @@ python -m kgfc.cli --file sample_code/main.py
 1. https://applyingml.com/resources/search-query-matching/ 
 2. [CodeKGC: Code Language Model for Generative Knowledge Graph Construction](https://arxiv.org/abs/2304.09048)
 3. https://wala.github.io/graph4code/
+4. [Codebase parser](https://github.com/davidfraser/pyan)
 
 ### ToDos
-- [ ] Add method for quering the database
+- [ ] Debug the issue of docstring
 - [ ] Add functionality for vector embedding for code
+- [ ] Add method for quering the database
 - [ ] Add support for hybrid query search
 - [ ] Improvise on the query search

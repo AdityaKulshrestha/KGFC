@@ -3,13 +3,14 @@ name = "kgfc"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 dependencies = [
     "flake8-pyproject>=1.2.3",
     "gitpython>=3.1.44",
+    "google-genai>=1.9.0",
+    "google-generativeai>=0.8.4",
     "loguru>=0.7.3",
     "neo4j>=5.28.1",
-    "pydantic>=2.10.6",
     "python-dotenv>=1.0.1",
     "tree-sitter>=0.24.0",
     "tree-sitter-languages>=1.10.2",

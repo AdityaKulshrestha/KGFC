@@ -8,6 +8,7 @@ from .utils import get_repo_name
 from .models import FileClass
 from kgfc import Treesitter
 from kgfc.database.client import Neo4jManager
+from kgfc.embedding import CodeEmbedder
 import argparse
 
 
@@ -17,18 +18,21 @@ def generate_codebase_tree(repo_url: str):
         repo_name = get_repo_name(repo_url)
         repo_path = os.path.join(temp_dir, repo_name)
         try:
+            # Clones the repositor to a temp directory
             Repo.clone_from(repo_url, repo_path)
 
             # Iterate over the files
             python_files_nodes = []
             python_files = glob.glob(os.path.join(repo_path, "**", "*.py"), recursive=True)
+            # Iterates over each python file
             for file_path in python_files:
                 file_path = os.path.abspath(file_path)
 
                 try:
                     file_content = read_file_content(file_path)  # Read file content
-
-                    class_nodes, method_nodes = parse_code_content(file_content)  # Parse content
+                    
+                    # Extract python classes and methods from the file
+                    class_nodes, method_nodes = parse_code_content(file_content)
                     subdirs_list = file_path.replace(f'{repo_path}{os.sep}', "").split(os.sep)
                     file_class = FileClass(name=os.path.basename(file_path),
                                            path=subdirs_list,
@@ -49,6 +53,7 @@ def generate_codebase_tree(repo_url: str):
 
 def insert_to_kg(repo_url: str, parsed_code: List[FileClass]):
     client = Neo4jManager()
+    code_embedder = CodeEmbedder()
     repo_name = get_repo_name(repo_url)
     # Create the repo node
     try:
@@ -70,13 +75,24 @@ def insert_to_kg(repo_url: str, parsed_code: List[FileClass]):
                 _ = client.execute_query(query, parameters)
 
             elif idx == (len(code.path) - 1):
-                query = """
-                    MATCH (subdir: SUBDIR {name: $sub_dir})
+                # Query to map the file to the subdirs and maps the classes to the files
+                query = """MATCH (subdir: SUBDIR {name: $sub_dir})
                     CREATE (file:FILE {filename: $filename})
-                    MERGE (subdir)-[:CONTAINS]->(file)
-                    RETURN file
+                    MERGE (subdir)-[:HAS_FILE]->(file)
+                    WITH file, $classes AS classes
+                    UNWIND classes AS class
+                    CREATE (c:Class {class_name: class.name, source_code: class.source_code, embedding: class.embedding})
+                    MERGE (file)-[:HAS_CLASS]->(c)
+                    RETURN file, c
                 """
-                parameters = {'sub_dir': code.path[idx-1], 'filename': sub_dir}
+                # Removing node key due to pydantic class and converting the pydantic class list into dictionary
+                classes =  [{key: value for key, value in python_class.dict().items() if key != 'node'} for python_class in code.classes]
+                # Generate the embedding of the code
+                updated_classes = [
+                    {**python_class, "embedding": code_embedder.generate_embedding(python_class['source_code'])} 
+                    for python_class in classes 
+                ] 
+                parameters = {'sub_dir': code.path[idx-1], 'filename': sub_dir, 'classes': updated_classes}
                 _ = client.execute_query(query, parameters)
                 logger.info(f"Successfully added file: {sub_dir}")
             else:
@@ -88,6 +104,11 @@ def insert_to_kg(repo_url: str, parsed_code: List[FileClass]):
                 """
                 parameters = {'parent_subdir': code.path[idx-1], 'sub_dir': sub_dir}
                 _ = client.execute_query(query, parameters)
+
+def fetch_answer(query: str, repo_name: str):
+
+
+    return answer
 
 
 def parse_code(args: argparse.Namespace):
