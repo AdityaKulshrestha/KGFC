@@ -17,11 +17,12 @@ def main():
         nodes = parse_code(args)
         insert_to_kg(args.repo_url, nodes)
         print([nodes[i].name for i in range(len(nodes))])
-    else:
+    elif (args.file and args.repo_url):
         parser.error("Only one of --file or --url must be provided.")
 
-    if args.q and args.repo_name:
-        answer = fetch_answer(args.q, args.repo_name)
+    if args.query and args.repo_name:
+        answer = fetch_answer(args.query, args.repo_name)
+        breakpoint()
 
     else:
         parser.error("Please provide the repository name for the query!")

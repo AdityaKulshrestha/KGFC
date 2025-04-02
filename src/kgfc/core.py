@@ -8,6 +8,7 @@ from .utils import get_repo_name
 from .models import FileClass
 from kgfc import Treesitter
 from kgfc.database.client import Neo4jManager
+from kgfc.database.retriever import retrieve_code
 from kgfc.embedding import CodeEmbedder
 import argparse
 
@@ -106,8 +107,9 @@ def insert_to_kg(repo_url: str, parsed_code: List[FileClass]):
                 _ = client.execute_query(query, parameters)
 
 def fetch_answer(query: str, repo_name: str):
-
-
+    fetched_response = retrieve_code(query=query, repo_name=repo_name)
+    answer = fetched_response
+    print(answer)
     return answer
 
 
